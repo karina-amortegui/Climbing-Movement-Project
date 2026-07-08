@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="loginForm">
+      <input type="text" name="username" required placeholder="example user" />
+      <input
+        type="password"
+        name="password"
+        required
+        placeholder="**********"
+      />
+      <button type="submit">login</button>
+    </form>
+    <script>
+      const form = document.getElementById("loginForm");
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        console.log("data =", data);
+        // 1. check if username and password are empty
+        if (data.username === "" || data.password === "") {
+          return alert("username and password are required");
+        }
+
+        fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log("data =", data);
+            if (data.message === "invalid credentials") {
+              form.reset();
+              return alert("Please check your username and password");
+            }
+
+            console.log("data =", data);
+            console.log("login successful");
+          });
+      });
+    </script>
+  </body>
+</html>
