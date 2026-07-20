@@ -6,12 +6,23 @@
 POST {{baseUrl}}
 Content-Type: application/json
 
-{
+[{
   "name": "test",
   "difficulty": 1,
   "description": "testing",
   "extraNotes": "test"
+},
+
+{
+  "name": "test2",
+  "difficulty": 1,
+  "description": "testing",
+  "extraNotes": "test"
 }
+]
+
 
 ### get movements
 GET {{baseUrl}}
+
+

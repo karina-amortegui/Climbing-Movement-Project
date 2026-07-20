@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/karina-amortegui/Climbing-Movement-Project#readme",
   "dependencies": {
+    "cores": "^0.8.5",
+    "cors": "^2.8.6",
     "express": "^5.2.1"
   },
   "devDependencies": {
