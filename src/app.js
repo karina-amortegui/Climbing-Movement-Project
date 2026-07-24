@@ -1,6 +1,5 @@
-
 // Load the express library
-const express = require("express"); 
+const express = require("express");
 
 const cors = require("cors");
 
@@ -10,37 +9,73 @@ const adminCreds = {
   password: "123456s*",
 };
 
-
-// This array temporarily acts like your database. 
-// Keep in mind because this is an in memory array. Everything disappears when the server restarts. 
+// This array temporarily acts like your database.
+// Keep in mind because this is an in memory array. Everything disappears when the server restarts.
 const movements = [];
-const MovementModel = (name, difficulty, description, extraNotes) => ({
+const MovementModel = (
+  movementName,
+  movementSummary,
+  movementDescription,
+  movementDifficulty,
+  movementStatus,
+  movementWhenToUse,
+  movmentHowToPerform,
+  movmentCommonMistakes,
+  movmentTags,
+  movementResearchNotes,
+  movementExtraNotes,
+) => ({
   _id: movements.length + 1,
-  name,
-  difficulty,
-  description,
-  extraNotes: extraNotes || "",
+  movementName,
+  movementSummary,
+  movementDescription,
+  movementDifficulty,
+  movementStatus,
+  movementWhenToUse,
+  movmentHowToPerform,
+  movmentCommonMistakes,
+  movmentTags,
+  movementResearchNotes,
+  movementExtraNotes: extraNotes || "",
   createdAt: new Date(),
   updatedAt: new Date(),
-  deletedAt: null
-})
+  deletedAt: null,
+});
 
 const exercises = [];
-const ExerciseModel = (name, movementId, difficulty, description, extraNotes) => ({
-   name,
-  movementId:
-  difficulty,
-  description,
-  extraNotes: extraNotes || "",
+const ExerciseModel = (
+  exercisesName,
+  exercisesSummary,
+  exercisesDescription,
+  exercisesDifficulty,
+  exercisesStatus,
+  exercisesWhenToUse,
+  exercisesowToPerform,
+  exercisesommonMistakes,
+  exercisesags,
+  exercisesResearchNotes,
+  exercisesExtraNotes,
+) => ({
+  _id: exercises.length + 1, //maybe name it exerciseId to be more specific?
+  exercisesName,
+  exercisesSummary,
+  exercisesDescription,
+  exercisesDifficulty,
+  exercisesStatus,
+  exercisesWhenToUse,
+  exercisesowToPerform,
+  exercisesommonMistakes,
+  exercisesags,
+  exercisesResearchNotes,
+  exercisesExtraNotes: extraNotes || "",
   createdAt: new Date(),
   updatedAt: new Date(),
-  deletedAt: null
-})
-
+  deletedAt: null,
+});
 
 // ----------- MOCK DB---------------------------- END
 
-// 1. create instance of express 
+// 1. create instance of express
 // creates express application (the app is your server)
 // everytime you see app.something you're adding another capability to your server
 const app = express();
@@ -54,26 +89,27 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(cors());
 
-
-
 // 2. add ping endpoint
 //GET -> give me some information
 app.get("/ping", function (req, res) {
   console.log("req =", req.ip);
-  res.send({data: [{
-  "name": "test",
-  "difficulty": 1,
-  "description": "testing",
-  "extraNotes": "test"
-},
+  res.send({
+    data: [
+      {
+        name: "test",
+        difficulty: 1,
+        description: "testing",
+        extraNotes: "test",
+      },
 
-{
-  "name": "test2",
-  "difficulty": 1,
-  "description": "testing",
-  "extraNotes": "test"
-}
-]});
+      {
+        name: "test2",
+        difficulty: 1,
+        description: "testing",
+        extraNotes: "test",
+      },
+    ],
+  });
 });
 
 // POST -> create something (save)
@@ -87,50 +123,132 @@ app.post("/login", function (req, res) {
     });
   }
 
-  res.redirect("/home.html")
+  res.redirect("/home.html");
 });
 
 // creates a climbing movement
 app.post("/movements", function (req, res) {
-  const { name, difficulty, description, extraNotes} = req.body;
+  const {
+    movementName,
+    movementSummary,
+    movementDescription,
+    movementDifficulty,
+    movementStatus,
+    movementWhenToUse,
+    movmentHowToPerform,
+    movmentCommonMistakes,
+    movmentTags,
+    movementResearchNotes,
+    movementExtraNotes,
+  } = req.body;
 
-  const newMovement = MovementModel(name, difficulty, description, extraNotes);
+  const newMovement = MovementModel(
+    movementName,
+    movementSummary,
+    movementDescription,
+    movementDifficulty,
+    movementStatus,
+    movementWhenToUse,
+    movmentHowToPerform,
+    movmentCommonMistakes,
+    movmentTags,
+    movementResearchNotes,
+    movementExtraNotes,
+  );
   movements.push(newMovement);
 
+  // http status codes (ex: 201, 200)
   res.status(201).json({
     message: "movement created successfully",
-    data: newMovement
-  })
-})
+    data: newMovement,
+  });
+});
 
 // returns all climbing movements
-app.get("/movements", function(req, res) {
+app.get("/movements", function (req, res) {
   res.status(200).json({
     message: "movements fetched successfully",
     data: movements,
-    total: movements.length
-  })
-})
+    total: movements.length,
+  });
+});
 
 app.post("/exercises", function (req, res) {
-  const { name, movementId, difficulty, description, extraNotes} = req.body;
+  const {
+    exercisesName,
+    exercisesSummary,
+    exercisesDescription,
+    exercisesDifficulty,
+    exercisesStatus,
+    exercisesWhenToUse,
+    exercisesowToPerform,
+    exercisesommonMistakes,
+    exercisesags,
+    exercisesResearchNotes,
+    exercisesExtraNotes,
+  } = req.body;
 
-  const newExercise = ExerciseModel(name, movementId, difficulty, description, extraNotes);
+  const newExercise = ExerciseModel(
+    exercisesName,
+    exercisesSummary,
+    exercisesDescription,
+    exercisesDifficulty,
+    exercisesStatus,
+    exercisesWhenToUse,
+    exercisesHowToPerform,
+    exercisesCommonMistakes,
+    exercisesTags,
+    exercisesResearchNotes,
+    exercisesExtraNotes,
+  );
   exercises.push(newExercise);
 
   res.status(201).json({
     message: "exercise created successfully",
-    data: newExercise
-  })
-})
+    data: newExercise,
+  });
+});
 
-app.get("/exercises", function(req, res) {
+app.get("/exercises", function (req, res) {
   res.status(200).json({
     message: "exercises fetched successfully",
     data: exercises,
-    total: exercises.length
-  })
-})
+    total: exercises.length,
+  });
+});
+
+// const submitMovment = () => {
+//   const movementData = {
+//     movementName: document.getElementById("name").value,
+//     movementSummary: document.getElementById("summary").value,
+//     movementDescription:document.getElementById("description").value,
+//     movementDifficulty: document.getElementById("difficulty").value,
+//     movementStatus: document.getElementById("status").value,
+//     movementWhenToUse: document.getElementById("when-to-use").value,
+//     movmentHowToPerform: document.getElementById("how-to-perform").value,
+//     movmentCommonMistakes: document.getElementById("common-mistakes").value,
+//     movmentTags: document.getElementById("tags").value,
+//     movementResearchNotes: document.getElementById("research-notes").value,
+//     movementExtraNotes: document.getElementById("extra-notes").value
+//   }
+
+//   const exerciseData = {
+//    exercisesName: document.getElementById("name").value,
+//    exercisesSummary: document.getElementById("summary").value,
+//    exercisesDescription: document.getElementById("description").value,
+//    exercisesDifficulty: document.getElementById("difficulty").value,
+//    exercisesStatus: document.getElementById("status").value,
+//    exercisesWhenToUse: document.getElementById("when-to-use").value,
+//    exercisesHowToPerform: document.getElementById("how-to-perform").value,
+//    exercisesCommonMistakes: document.getElementById("common-mistakes").value,
+//    exercisesTags: document.getElementById("tags").value,
+//    exercisesResearchNotes: document.getElementById("research-notes").value,
+//    exercisesExtraNotes: document.getElementById("extra-notes").value,
+//   };
+//   return (
+
+//   )
+// }å
 
 // 3. module.exports = app;
 // app.listen(8787, function () {
